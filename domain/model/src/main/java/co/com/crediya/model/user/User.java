@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class User {
     private Long id;
-    private String firstName;
+    private String name;
     private String lastName;
     private LocalDate birthDate;
     private String address;

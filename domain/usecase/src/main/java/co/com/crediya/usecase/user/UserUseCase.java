@@ -10,16 +10,21 @@ public class UserUseCase {
 
     private final UserRepository userRepository;
 
-    public Mono<User> saveUser (User user) {
+    public Mono<User> saveUser(User user) {
         return userRepository.findByEmail(user.getEmail())
-                // Si lo encuentra, lanzamos error (ya existe)
-                .flatMap(existing -> Mono.<User>error(
-                        new IllegalStateException("El usuario ya existe: " + existing.getEmail())))
-                // Si no existe, guardamos
-                .switchIfEmpty(Mono.defer(() -> userRepository.save(user)));
+                .hasElement()
+                .flatMap(exists -> {
+                    if (Boolean.TRUE.equals(exists)) {
+                        return Mono.error(new IllegalStateException(
+                                "El usuario con email " + user.getEmail() + " ya existe"
+                        ));
+                    }
+                    return userRepository.save(user);
+                });
+
     }
 
-    public Mono<User> getUsuarioByEmail(String email){
+    public Mono<User> getUsuarioByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
 }

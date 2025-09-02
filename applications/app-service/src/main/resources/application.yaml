@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 spring:
   application:
-    name: "autenticacion"
+    name: ${APPLICATION_NAME}
   devtools:
     add-properties: false
   h2:
@@ -13,12 +13,12 @@ spring:
     include: null
 adapters:
   r2dbc:
-    host: "localhost"
-    port: 5432
-    database: "db_autenticacion"
+    host: ${DB_HOST}
+    port: ${DB_PUERTO}
+    database: ${DB_NAME_DATABASE}
     schema: "public"
-    username: "postgres"
-    password: "postgres"
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
 management:
   endpoints:

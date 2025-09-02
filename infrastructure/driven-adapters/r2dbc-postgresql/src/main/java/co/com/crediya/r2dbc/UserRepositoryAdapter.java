@@ -11,14 +11,13 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class UserRepositoryAdapter extends ReactiveAdapterOperations<
-        User/* change for domain model */,
-        UserEntity/* change for adapter model */,
+        User,
+        UserEntity,
         Long,
         UserReactiveRepository
         > implements UserRepository {
     private final TransactionalOperator transactionalOperator;
     public UserRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper, TransactionalOperator transactionalOperator) {
-
         super(repository, mapper, entity -> mapper.map(entity, User.class));
         this.transactionalOperator = transactionalOperator;
     }
@@ -30,6 +29,11 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<User> findByEmail(String email) {
-        return repository.findByEmail(email).map(usuarioEntity -> mapper.map(usuarioEntity, User.class));
+
+        Mono<UserEntity> econtrado11 = repository.findByEmail(email);
+
+        Mono<User> encontrado = repository.findByEmail(email).map(usuarioEntity -> mapper.map(usuarioEntity, User.class));
+
+        return encontrado;
     }
 }
