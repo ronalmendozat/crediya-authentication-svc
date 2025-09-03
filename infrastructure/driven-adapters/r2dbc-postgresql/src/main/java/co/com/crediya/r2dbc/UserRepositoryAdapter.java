@@ -29,11 +29,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<User> findByEmail(String email) {
-
-        Mono<UserEntity> econtrado11 = repository.findByEmail(email);
-
-        Mono<User> encontrado = repository.findByEmail(email).map(usuarioEntity -> mapper.map(usuarioEntity, User.class));
-
-        return encontrado;
+        return repository.findByEmail(email)
+                .flatMap(usuarioEntity -> Mono.just(mapper.map(usuarioEntity, User.class)));
     }
 }
