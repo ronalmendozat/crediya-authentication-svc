@@ -23,8 +23,4 @@ public class UserUseCase {
                 });
 
     }
-
-    public Mono<User> getUsuarioByEmail(String email) {
-        return this.userRepository.findByEmail(email);
-    }
 }
