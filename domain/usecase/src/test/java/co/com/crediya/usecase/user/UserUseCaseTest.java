@@ -58,4 +58,33 @@ class UserUseCaseTest {
                 .verify();
     }
 
+    @Test
+    @DisplayName("Test exist user by identity document OK")
+    void testExistUserByIdentityDocument_OK(){
+        User user = UserUseCaseTestHelper.crearUsuario();
+
+        Mockito.when(this.userRepository.findByIdentityDocument(Mockito.anyString()))
+                .thenReturn(Mono.just(user));
+
+        Mono<Boolean> result = this.userUseCase.existUserByIdentityDocument("documento-test");
+
+        StepVerifier.create(result)
+                .expectNext(true)
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("Test exist user by identity document KO")
+    void testExistUserByIdentityDocument_KO(){
+
+        Mockito.when(this.userRepository.findByIdentityDocument(Mockito.anyString()))
+                .thenReturn(Mono.empty());
+
+        Mono<Boolean> result = this.userUseCase.existUserByIdentityDocument("documento-test");
+
+        StepVerifier.create(result)
+                .expectNext(false)
+                .verifyComplete();
+    }
+
 }

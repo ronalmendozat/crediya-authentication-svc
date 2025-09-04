@@ -17,19 +17,27 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         UserReactiveRepository
         > implements UserRepository {
     private final TransactionalOperator transactionalOperator;
+
     public UserRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper, TransactionalOperator transactionalOperator) {
         super(repository, mapper, entity -> mapper.map(entity, User.class));
         this.transactionalOperator = transactionalOperator;
     }
 
     @Override
-    public Mono<User> save (User user){
+    public Mono<User> save(User user) {
         return super.save(user).as(transactionalOperator::transactional);
     }
 
     @Override
     public Mono<User> findByEmail(String email) {
         return repository.findByEmail(email)
-                .flatMap(usuarioEntity -> Mono.just(mapper.map(usuarioEntity, User.class)));
+                .flatMap(userEntity -> Mono.just(mapper.map(userEntity, User.class)));
+    }
+
+    @Override
+    public Mono<User> findByIdentityDocument(String identityDocument) {
+        return repository.findByIdentityDocument(identityDocument)
+                .flatMap(userEntity -> Mono.just(mapper.map(userEntity, User.class)));
+
     }
 }

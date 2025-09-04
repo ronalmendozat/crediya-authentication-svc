@@ -37,4 +37,6 @@ public class UserEntity {
 
     @Column(name = "base_salary")
     private BigDecimal baseSalary;
+
+    private String identityDocument;
 }

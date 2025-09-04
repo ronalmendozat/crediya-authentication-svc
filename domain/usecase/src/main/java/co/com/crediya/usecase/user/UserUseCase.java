@@ -23,4 +23,10 @@ public class UserUseCase {
                 });
 
     }
+
+    public Mono<Boolean> existUserByIdentityDocument(String identityDocument){
+        return userRepository.findByIdentityDocument(identityDocument)
+                .map(exist -> true)
+                .defaultIfEmpty(false);
+    }
 }

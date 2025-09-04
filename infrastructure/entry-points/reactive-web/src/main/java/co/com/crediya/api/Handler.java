@@ -28,10 +28,18 @@ public class Handler {
                 .doOnNext(dto -> log.info("Usuario a crear {}", dto.toString()))
                 .flatMap(this::validate)
                 .flatMap(dto -> userUseCase.saveUser(userDTOMapper.toUser(dto)))
-                .doOnNext( user -> log.info("Usuario creado con éxito, con el Id: " + user.getId()))
+                .doOnNext(user -> log.info("Usuario creado con éxito, con el Id: " + user.getId()))
                 .flatMap(user -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(userDTOMapper.toUserDto(user)));
+    }
+
+    public Mono<ServerResponse> existUserByIdentityDocument(ServerRequest serverRequest) {
+        String identityDocument = serverRequest.pathVariable("document");
+        return userUseCase.existUserByIdentityDocument(identityDocument)
+                .flatMap(exist -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(exist));
     }
 
     private <T> Mono<T> validate(T dto) {

@@ -34,4 +34,7 @@ public class UserDTO {
     @DecimalMax(value = "15000000.0", message = "{user.salary.max}")
     @Digits(integer = 8, fraction = 2, message = "{user.salary.digits}")
     private BigDecimal baseSalary;
+
+    @NotBlank(message = "{user.document.notblank}")
+    private String identityDocument;
 }
