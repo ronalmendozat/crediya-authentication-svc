@@ -87,4 +87,37 @@ class UserUseCaseTest {
                 .verifyComplete();
     }
 
+    @Test
+    @DisplayName("Test find User by email OK")
+    void testFindUserByEmail_OK() {
+
+        User user = UserUseCaseTestHelper.crearUsuario();
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.anyString()))
+                .thenReturn(Mono.just(user));
+
+        Mono<User> result = this.userUseCase.findUserByEmail("email");
+
+        StepVerifier.create(result)
+                .expectNextMatches(u -> u.getEmail().equals("ronal@gmail.com"))
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("Test find by document OK")
+    void testFindByDocument_OK() {
+
+        User user = UserUseCaseTestHelper.crearUsuario();
+
+        Mockito.when(this.userRepository.findByIdentityDocument(Mockito.anyString()))
+                .thenReturn(Mono.just(user));
+
+        Mono<User> result = this.userUseCase.findUserByDocument("document");
+
+        StepVerifier.create(result)
+                .expectNextMatches(u -> u.getEmail().equals("ronal@gmail.com"))
+                .verifyComplete();
+    }
+
+
 }

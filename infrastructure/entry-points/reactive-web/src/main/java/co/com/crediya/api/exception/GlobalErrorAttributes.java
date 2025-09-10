@@ -22,7 +22,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         errorAttributes.put("timestamp", OffsetDateTime.now(ZoneOffset.UTC).toString());
         errorAttributes.put("path", request.path());
         errorAttributes.put("message", error.getMessage());
-        log.error(error.getMessage());
+        log.error(error.toString());
         return errorAttributes;
     }
 }

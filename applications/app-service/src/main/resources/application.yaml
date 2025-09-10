@@ -32,3 +32,16 @@ management:
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
+    enabled: true

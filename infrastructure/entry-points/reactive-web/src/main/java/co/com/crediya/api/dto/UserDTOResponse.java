@@ -1,16 +1,18 @@
-package co.com.crediya.model.user;
-import lombok.*;
+package co.com.crediya.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Data
 @ToString
-public class User {
+public class UserDTOResponse {
 
     private Long id;
     private String name;
@@ -21,8 +23,4 @@ public class User {
     private String email;
     private BigDecimal baseSalary;
     private String identityDocument;
-    private String password;
-    private Long rolId;
-    private Boolean active;
-
 }

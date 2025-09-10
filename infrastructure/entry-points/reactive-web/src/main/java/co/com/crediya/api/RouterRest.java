@@ -1,7 +1,11 @@
 package co.com.crediya.api;
 
-import co.com.crediya.api.dto.UserDTO;
+import co.com.crediya.api.dto.UserDTORequest;
+import co.com.crediya.api.dto.UserDTOResponse;
+import co.com.crediya.api.security.model.LogInDTO;
+import co.com.crediya.api.security.model.TokenDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -35,14 +39,14 @@ public class RouterRest {
                             requestBody = @RequestBody(
                                     required = true,
                                     description = "Datos del usuario a registrar",
-                                    content = @Content(schema = @Schema(implementation = UserDTO.class))
+                                    content = @Content(schema = @Schema(implementation = UserDTORequest.class))
                             ),
                             responses = {
                                     @ApiResponse(
                                             responseCode = "200",
                                             description = "Usuario guardado correctamente",
                                             content = @Content(mediaType = "application/json",
-                                                    schema = @Schema(implementation = String.class))
+                                                    schema = @Schema(implementation = UserDTOResponse.class))
                                     )
                             }
                     )
@@ -56,7 +60,7 @@ public class RouterRest {
                             summary = "Validar existencia de un usuario",
                             description = "Verifica si un usuario existe en el sistema según su documento de identidad",
                             parameters = {
-                                    @io.swagger.v3.oas.annotations.Parameter(
+                                    @Parameter(
                                             name = "document",
                                             description = "Documento de identidad del usuario",
                                             required = true,
@@ -66,9 +70,58 @@ public class RouterRest {
                             responses = {
                                     @ApiResponse(
                                             responseCode = "200",
-                                            description = "El usuario existe o no existe",
+                                            description = "Usuario encontrado",
                                             content = @Content(mediaType = "application/json",
-                                                    schema = @Schema(implementation = Boolean.class))
+                                                    schema = @Schema(implementation = UserDTOResponse.class))
+                                    )
+                            }
+                    )
+            ),
+            @RouterOperation(
+                    path = "/api/v1/usuarios/email/{email}",
+                    beanClass = Handler.class,
+                    beanMethod = "findUserByDocument",
+                    operation = @Operation(
+                            operationId = "findUserByDocument",
+                            summary = "Buscar Usuario por documento",
+                            description = "Regresa un usuario buscado según su Email",
+                            parameters = {
+                                    @Parameter(
+                                            name = "email",
+                                            description = "Email del usuario",
+                                            required = true,
+                                            schema = @Schema(type = "string")
+                                    )
+                            },
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "Usuario encontrado",
+                                            content = @Content(mediaType = "application/json",
+                                                    schema = @Schema(implementation = UserDTOResponse.class))
+                                    )
+                            }
+                    )
+            ),
+            @RouterOperation(
+                    path = "/api/v1/login",
+                    beanClass = Handler.class,
+                    beanMethod = "login",
+                    operation = @Operation(
+                            operationId = "login",
+                            summary = "Login",
+                            description = "Regresa un token",
+                            requestBody = @RequestBody(
+                                    required = true,
+                                    description = "Correo y contraseña",
+                                    content = @Content(schema = @Schema(implementation = LogInDTO.class))
+                            ),
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "Token generado",
+                                            content = @Content(mediaType = "application/json",
+                                                    schema = @Schema(implementation = TokenDTO.class))
                                     )
                             }
                     )
@@ -76,6 +129,10 @@ public class RouterRest {
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST("/api/v1/usuarios"), handler::saveUser)
-                .andRoute(GET("/api/v1/usuarios/{document}"), handler::existUserByIdentityDocument);
+                .andRoute(GET("/api/v1/usuarios/{document}"), handler::findUserByDocument)
+                .andRoute(GET("/api/v1/usuarios/email/{email}"), handler::findUserByEmail)
+                .andRoute(POST("/api/v1/login"), handler::authenticate);
     }
+
+
 }

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @ToString
-public class UserDTO {
+public class UserDTORequest {
     private Long id;
 
     @NotBlank(message = "{user.name.notblank}")
@@ -37,4 +37,6 @@ public class UserDTO {
 
     @NotBlank(message = "{user.document.notblank}")
     private String identityDocument;
+
+    private String password;
 }

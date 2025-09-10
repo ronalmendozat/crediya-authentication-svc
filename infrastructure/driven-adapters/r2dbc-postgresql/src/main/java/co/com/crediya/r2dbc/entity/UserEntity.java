@@ -39,4 +39,11 @@ public class UserEntity {
     private BigDecimal baseSalary;
 
     private String identityDocument;
+
+    private String password;
+
+    @Column(name = "rol_id")
+    private Long rolId;
+
+    private Boolean active;
 }

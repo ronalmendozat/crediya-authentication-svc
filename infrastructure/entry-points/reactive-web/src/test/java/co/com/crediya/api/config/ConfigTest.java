@@ -2,12 +2,16 @@ package co.com.crediya.api.config;
 
 import co.com.crediya.api.Handler;
 import co.com.crediya.api.RouterRest;
-import co.com.crediya.api.mapper.UserDTOMapper;
+import co.com.crediya.api.mapper.UserDTORequestMapper;
+import co.com.crediya.api.mapper.UserDTOResponseMapper;
+import co.com.crediya.api.security.jwt.JwtProvider;
+import co.com.crediya.usecase.rol.RolUseCase;
 import co.com.crediya.usecase.user.UserUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -24,7 +28,16 @@ class ConfigTest {
     private UserUseCase userUseCase;
 
     @MockitoBean
-    private UserDTOMapper userDTOMapper;
+    private UserDTORequestMapper userDTOMapper;
+
+    @MockitoBean
+    private UserDTOResponseMapper userDTOResponseMapper;
+    @MockitoBean
+    private PasswordEncoder passwordEncoder;
+    @MockitoBean
+    private JwtProvider jwtProvider;
+    @MockitoBean
+    private RolUseCase rolUseCase;
 
     @Test
     void corsConfigurationShouldAllowOrigins() {
